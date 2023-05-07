@@ -10,11 +10,34 @@ rbtree *new_rbtree(void) {
 
 void delete_rbtree(rbtree *t) {
   // TODO: reclaim the tree nodes's memory
+  
   free(t);
 }
 
 node_t *rbtree_insert(rbtree *t, const key_t key) {
   // TODO: implement insert
+  node_t *new_node = (node_t *)malloc(sizeof(node_t));
+  new_node->color = RBTREE_RED;
+  new_node->key = key;
+  new_node->parent = NULL;
+  new_node->left = NULL;
+  new_node->right = NULL;
+
+  if (t->root == NULL) {
+    new_node->color = RBTREE_BLACK;
+    t->root = new_node;
+    return t->root;
+  }
+  
+  node_t *parent = t->root;
+  while (parent != NULL) {
+    if (parent->key < new_node->key)
+      parent = parent->right;
+    else if (parent->key > new_node->key)
+      parent = parent->left;
+  }
+
+  parent = new_node;
   return t->root;
 }
 
