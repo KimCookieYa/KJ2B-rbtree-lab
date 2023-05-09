@@ -96,21 +96,22 @@ void test_minmax(key_t *arr, const size_t n) {
 
   rbtree *t = new_rbtree();
   assert(t != NULL);
-
+  printf("insert_arr\n");
   insert_arr(t, arr, n);
   assert(t->root != NULL);
 #ifdef SENTINEL
   assert(t->root != t->nil);
 #endif
-
+  printf("start\n");
   qsort((void *)arr, n, sizeof(key_t), comp);
   node_t *p = rbtree_min(t);
   assert(p != NULL);
   assert(p->key == arr[0]);
-
+  printf("min end\n");
   node_t *q = rbtree_max(t);
   assert(q != NULL);
   assert(q->key == arr[n - 1]);
+  printf("max end\n");
 
   rbtree_erase(t, p);
   p = rbtree_min(t);
@@ -374,12 +375,14 @@ int main(void) {
   printf("Success: test_insert_single\n");
   test_find_single(512, 1024);
   printf("Success: test_find_single\n");
-  test_erase_root(128);
-  printf("Success: test_erase_root\n");
-  test_find_erase_fixed();
-  printf("Success: test_find_erase_fixed\n");
   test_minmax_suite();
   printf("Success: test_minmax_suite\n");
+  test_erase_root(128);
+  printf("Success: test_erase_root\n");
+  
+  test_find_erase_fixed();
+  printf("Success: test_find_erase_fixed\n");
+  
   test_to_array_suite();
   printf("Success: test_to_array_suite\n");
   test_distinct_values();
