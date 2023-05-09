@@ -72,9 +72,12 @@ void test_erase_root(const key_t key) {
 }
 
 static void insert_arr(rbtree *t, const key_t *arr, const size_t n) {
+  key_t *res = (key_t *)calloc(n, sizeof(key_t));
   for (size_t i = 0; i < n; i++) {
     rbtree_insert(t, arr[i]);
+    rbtree_to_array(t, res, n);
   }
+  free(res);
 }
 
 static int comp(const void *p1, const void *p2) {
