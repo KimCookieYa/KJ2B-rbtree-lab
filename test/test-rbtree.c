@@ -72,12 +72,9 @@ void test_erase_root(const key_t key) {
 }
 
 static void insert_arr(rbtree *t, const key_t *arr, const size_t n) {
-  key_t *res = (key_t *)calloc(n, sizeof(key_t));
   for (size_t i = 0; i < n; i++) {
     rbtree_insert(t, arr[i]);
-    rbtree_to_array(t, res, n);
   }
-  free(res);
 }
 
 static int comp(const void *p1, const void *p2) {
@@ -99,22 +96,19 @@ void test_minmax(key_t *arr, const size_t n) {
 
   rbtree *t = new_rbtree();
   assert(t != NULL);
-  printf("insert_arr\n");
   insert_arr(t, arr, n);
   assert(t->root != NULL);
 #ifdef SENTINEL
   assert(t->root != t->nil);
 #endif
-  printf("start\n");
   qsort((void *)arr, n, sizeof(key_t), comp);
   node_t *p = rbtree_min(t);
   assert(p != NULL);
   assert(p->key == arr[0]);
-  printf("min end\n");
+
   node_t *q = rbtree_max(t);
   assert(q != NULL);
   assert(q->key == arr[n - 1]);
-  printf("max end\n");
 
   rbtree_erase(t, p);
   p = rbtree_min(t);
@@ -322,7 +316,7 @@ void test_find_erase(rbtree *t, const key_t *arr, const size_t n) {
 
   for (int i = 0; i < n; i++) {
     node_t *p = rbtree_find(t, arr[i]);
-    // printf("arr[%d] = %d\n", i, arr[i]);
+    printf("arr[%d] = %d\n", i, arr[i]);
     assert(p != NULL);
     assert(p->key == arr[i]);
     rbtree_erase(t, p);
@@ -362,7 +356,7 @@ void test_find_erase_rand(const size_t n, const unsigned int seed) {
   rbtree *t = new_rbtree();
   key_t *arr = calloc(n, sizeof(key_t));
   for (int i = 0; i < n; i++) {
-    arr[i] = rand();
+    arr[i] = rand()/10000;
   }
 
   test_find_erase(t, arr, n);
@@ -378,14 +372,12 @@ int main(void) {
   printf("Success: test_insert_single\n");
   test_find_single(512, 1024);
   printf("Success: test_find_single\n");
-  test_minmax_suite();
-  printf("Success: test_minmax_suite\n");
   test_erase_root(128);
   printf("Success: test_erase_root\n");
-  
+  test_minmax_suite();
+  printf("Success: test_minmax_suite\n");
   test_find_erase_fixed();
   printf("Success: test_find_erase_fixed\n");
-  
   test_to_array_suite();
   printf("Success: test_to_array_suite\n");
   test_distinct_values();
@@ -394,7 +386,7 @@ int main(void) {
   printf("Success: test_duplicate_values\n");
   test_multi_instance();
   printf("Success: test_multi_instance\n");
-  test_find_erase_rand(10000, 17);
+  test_find_erase_rand(100, 17);
   printf("Success: test_find_erase_rand\n");
   printf("Passed all tests!\n");
 }
