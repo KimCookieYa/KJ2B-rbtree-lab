@@ -341,6 +341,8 @@ int rbtree_erase(rbtree *t, node_t *p) {
   if (y_original_color == RBTREE_BLACK)
     rbtree_erase_fixup(t, x);
   
+  free(p);
+  
   return res;
 }
 
@@ -358,5 +360,6 @@ int rbtree_to_array(const rbtree *t, key_t *arr, const size_t n) {
   // TODO: implement to_array
   int *idx = (int *)calloc(1, sizeof(int));
   inorder_rbtree(t, t->root, arr, n, idx);
+  free(idx);
   return 0;
 }
