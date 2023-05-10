@@ -95,19 +95,26 @@ void rbtree_insert_fixup(rbtree *t, node_t *z) {
         y->color = RBTREE_BLACK;
         z->parent->parent->color = RBTREE_RED;
         z = z->parent->parent;
+        if (z->parent == t->nil && z->color == RBTREE_RED) {
+          z->color = RBTREE_BLACK;
+        }
+        print_rbtree(t);
       }
       else if (z == z->parent->right) {
         // case 2
         z = z->parent;
-        print_rbtree(t);
         left_rotate(t, z);
-        print_rbtree(t);
+      }
+      else {
         // case 3
         z->parent->color = RBTREE_BLACK;
         z->parent->parent->color = RBTREE_RED;
-        right_rotate(t, z->parent->parent);
-        print_rbtree(t);
+        
+        z = z->parent->parent;
+        right_rotate(t, z);
+      print_rbtree(t);
       }
+      
     }
     else {
       node_t *y = z->parent->parent->left;
@@ -117,16 +124,25 @@ void rbtree_insert_fixup(rbtree *t, node_t *z) {
         y->color = RBTREE_BLACK;
         z->parent->parent->color = RBTREE_RED;
         z = z->parent->parent;
+        if (z->parent == t->nil && z->color == RBTREE_RED) {
+          z->color = RBTREE_BLACK;
+        }
+        print_rbtree(t);
       }
       else if (z == z->parent->left) {
         // case 2
         z = z->parent;
         right_rotate(t, z);
+      }
+      else {
         // case 3
         z->parent->color = RBTREE_BLACK;
         z->parent->parent->color = RBTREE_RED;
-        left_rotate(t, z->parent->parent);
+        z = z->parent->parent;
+        left_rotate(t, z);
+      print_rbtree(t);
       }
+      
     }
   }
   t->root->color = RBTREE_BLACK;
